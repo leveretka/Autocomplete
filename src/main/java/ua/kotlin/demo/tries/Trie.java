@@ -4,15 +4,13 @@ import kotlin.Pair;
 
 public interface Trie {
 
-    public void add(Pair<String, Integer> word);
+    void add(Pair<String, Integer> word);
 
-    public boolean contains(String word);
+    boolean contains(String word);
 
-    public boolean delete(String word);
+    boolean delete(String word);
 
-    public Iterable<String> words();
+    Iterable<String> words();
 
-    public Iterable<String> wordsWithPrefix(String pref);
-    
-    public int size();
+    Iterable<String> wordsWithPrefix(String pref);
 }
