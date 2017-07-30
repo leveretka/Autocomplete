@@ -1,8 +1,10 @@
-package ua.edu.ucu.tries;
+package ua.kotlin.demo.tries;
+
+import kotlin.Pair;
 
 public interface Trie {
 
-    public void add(Tuple word);
+    public void add(Pair<String, Integer> word);
 
     public boolean contains(String word);
 

@@ -1,6 +1,6 @@
-package ua.edu.ucu.autocomplete;
+package ua.kotlin.demo.autocomplete;
 
-import ua.edu.ucu.tries.Trie;
+import ua.kotlin.demo.tries.Trie;
 
 /**
  *
