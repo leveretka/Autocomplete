@@ -14,11 +14,11 @@ class RWayTrie : Trie {
     override fun add(word: Pair<String, Int?>) {
         val key = word.first
         var x = root
-        for (c in key.toCharArray()) {
-            if (x.nodes[c - 'a'] == null)
-                x.nodes[c - 'a'] = Node()
+        key.toCharArray().map { it - 'a' }.forEach {
+            if (x.nodes[it] == null)
+                x.nodes[it] = Node()
 
-            x = x.nodes[c -  'a'] as Node
+            x = x.nodes[it] as Node
         }
         x.value = word.second
 
@@ -27,11 +27,11 @@ class RWayTrie : Trie {
 
     override fun contains(word: String): Boolean {
         var x = root
-        for (c in word.toCharArray()) {
-            if (x.nodes[c - 'a'] == null)
+        word.toCharArray().map { it - 'a' }.forEach {
+            if (x.nodes[it] == null)
                 return false
 
-            x = x.nodes[c - 'a'] as Node
+            x = x.nodes[it] as Node
         }
         return x.value != null
     }
@@ -48,8 +48,8 @@ class RWayTrie : Trie {
             x.value = null
         }
         else {
-            val c = key[d]
-            x.nodes[c - 'a'] = delete(x.nodes[c - 'a'], key, d + 1)
+            val index = key[d] - 'a'
+            x.nodes[index] = delete(x.nodes[index], key, d + 1)
         }
 
         if (x.value != null)
