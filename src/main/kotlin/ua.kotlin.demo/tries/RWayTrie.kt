@@ -1,11 +1,13 @@
 package ua.kotlin.demo.tries
 
-private val ALPHABET_SIZE = 26
+public const val ALPHABET_SIZE = 26
 
 class RWayTrie : Trie {
 
     var size = 0
-    val root = Node()
+        private set
+    var root = Node()
+        private set
 
     data class Node(var value: Int? = null, var nodes: Array<Node?> = Array<Node?>(ALPHABET_SIZE, {null}))
 
@@ -29,13 +31,31 @@ class RWayTrie : Trie {
             if (x.nodes[c - 'a'] == null)
                 return false
 
-            x = x.nodes[c -  'a'] as Node
+            x = x.nodes[c - 'a'] as Node
         }
         return x.value != null
     }
 
-    override fun delete(word: String): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun delete(word: String) {
+        root = delete(root, word, 0)?: Node()
+    }
+
+    private fun delete(x: Node?, key: String, d:Int) : Node? {
+        if (x == null) return null
+        if (d == key.length) {
+            if (x.value != null)
+                size--
+            x.value = null
+        }
+        else {
+            val c = key[d]
+            x.nodes[c - 'a'] = delete(x.nodes[c - 'a'], key, d + 1)
+        }
+
+        if (x.value != null)
+            return x
+
+        return if ((0..ALPHABET_SIZE - 1).any { x.nodes[it] != null }) x else null
     }
 
     override fun words(): MutableIterable<String> {

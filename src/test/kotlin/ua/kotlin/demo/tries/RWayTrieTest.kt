@@ -55,4 +55,35 @@ class RWayTrieTest {
         val secondWord = firstWord?.nodes?.get(1)
         assertEquals(2, secondWord?.value)
     }
+
+    @Test
+    fun shouldDeleteWord() {
+        rWayTrie.add("a" to 1)
+        rWayTrie.delete("a")
+
+        assertEquals(0, rWayTrie.size)
+        assertFalse(rWayTrie.contains("a"))
+    }
+
+    @Test
+    fun shouldDeleteUnnecessaryNodesWhenDeleteWord() {
+        rWayTrie.add("a" to 1)
+        rWayTrie.add("abcde" to 5)
+        rWayTrie.delete("abcde")
+
+        val firstWord = rWayTrie.root.nodes[0]
+
+        firstWord?.nodes?.all { it == null }?.let { assertTrue(it)}
+    }
+
+    @Test
+    fun shouldNotDeleteMissingWord() {
+        rWayTrie.add("a" to 1)
+        rWayTrie.add("abcde" to 5)
+        rWayTrie.delete("abc")
+
+        assertEquals(2, rWayTrie.size)
+        assertFalse(rWayTrie.contains("abc"))
+    }
+
 }

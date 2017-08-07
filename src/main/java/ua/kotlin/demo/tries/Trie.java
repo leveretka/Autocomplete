@@ -8,7 +8,7 @@ public interface Trie {
 
     boolean contains(String word);
 
-    boolean delete(String word);
+    void delete(String word);
 
     Iterable<String> words();
 
