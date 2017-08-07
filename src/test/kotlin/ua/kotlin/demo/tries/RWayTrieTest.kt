@@ -2,6 +2,7 @@ package ua.kotlin.demo.tries
 
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class RWayTrieTest {
@@ -25,5 +26,9 @@ class RWayTrieTest {
         assertTrue (rWayTrie.contains("a"))
     }
 
-
+    @Test
+    fun shouldNotFindAbsentWord() {
+        rWayTrie.add("a" to 1)
+        assertFalse (rWayTrie.contains("aa"))
+    }
 }
