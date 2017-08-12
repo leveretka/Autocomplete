@@ -1,5 +1,6 @@
 package ua.kotlin.demo.tries
 
+import com.sun.xml.internal.fastinfoset.util.StringArray
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -113,5 +114,15 @@ class RWayTrieTest {
         assertEquals(mutableListOf("a", "b", "c", "d", "e", "f"), rWayTrie.words())
     }
 
+    @Test
+    fun shouldFindMultiCharacterWords() {
+        rWayTrie.add("a" to 1)
+        rWayTrie.add("bdsfsd" to 6)
+        rWayTrie.add("c" to 1)
+        rWayTrie.add("abcdef" to 6)
+
+        assertEquals(4, rWayTrie.size)
+        assertEquals(mutableListOf("a", "abcdef", "bdsfsd", "c"), rWayTrie.words())
+    }
 
 }

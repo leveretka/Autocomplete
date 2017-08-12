@@ -41,7 +41,7 @@ class RWayTrie : Trie {
     }
 
     private fun delete(x: Node?, key: String, d:Int) : Node? {
-        if (x == null) return null
+        x?: return null
         if (d == key.length) {
             if (x.value != null)
                 size--
@@ -60,11 +60,17 @@ class RWayTrie : Trie {
 
     override fun words(): MutableIterable<String> {
         val result = mutableListOf<String>()
-        for ((i, node) in root.nodes.withIndex()) {
-            if (node?.value != null)
-                result.add(('a' + i).toString())
-        }
+        words(root, -1, "", result)
         return result
+    }
+
+    private fun words(node: Node, index: Int, prefix: String, result: MutableList<String>) {
+        val word = if (index == -1) "" else prefix + ('a' + index)
+        if (node.value != null)
+            result.add(word)
+        (0..ALPHABET_SIZE - 1)
+                .filter { node.nodes[it] != null }
+                .forEach { words(node.nodes[it] as Node, it, word, result) }
     }
 
     override fun wordsWithPrefix(pref: String): MutableIterable<String> {
