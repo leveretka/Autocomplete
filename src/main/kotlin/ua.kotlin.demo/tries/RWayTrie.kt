@@ -1,6 +1,6 @@
 package ua.kotlin.demo.tries
 
-public const val ALPHABET_SIZE = 26
+const val ALPHABET_SIZE = 26
 
 class RWayTrie : Trie {
 
@@ -9,7 +9,7 @@ class RWayTrie : Trie {
     var root = Node()
         private set
 
-    data class Node(var value: Int? = null, var nodes: Array<Node?> = Array<Node?>(ALPHABET_SIZE, {null}))
+    class Node(var value: Int? = null, var nodes: Array<Node?> = Array<Node?>(ALPHABET_SIZE, {null}))
 
     override fun add(word: Pair<String, Int?>) {
         val key = word.first
@@ -59,7 +59,12 @@ class RWayTrie : Trie {
     }
 
     override fun words(): MutableIterable<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val result = mutableListOf<String>()
+        for ((i, node) in root.nodes.withIndex()) {
+            if (node?.value != null)
+                result.add(('a' + i).toString())
+        }
+        return result
     }
 
     override fun wordsWithPrefix(pref: String): MutableIterable<String> {

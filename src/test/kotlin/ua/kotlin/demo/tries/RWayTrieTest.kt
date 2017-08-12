@@ -86,4 +86,32 @@ class RWayTrieTest {
         assertFalse(rWayTrie.contains("abc"))
     }
 
+    @Test
+    fun shouldReturnEmptyListWhenNothingWasAdded() {
+        assertEquals(0, rWayTrie.size)
+        assertEquals(mutableListOf(), rWayTrie.words())
+    }
+
+    @Test
+    fun shouldReturnOneExistingWord() {
+        rWayTrie.add("a" to 1)
+
+        assertEquals(1, rWayTrie.size)
+        assertEquals(mutableListOf("a"), rWayTrie.words())
+    }
+
+    @Test
+    fun shouldReturnAllExistingOneCharacterWord() {
+        rWayTrie.add("a" to 1)
+        rWayTrie.add("b" to 1)
+        rWayTrie.add("c" to 1)
+        rWayTrie.add("d" to 1)
+        rWayTrie.add("e" to 1)
+        rWayTrie.add("f" to 1)
+
+        assertEquals(6, rWayTrie.size)
+        assertEquals(mutableListOf("a", "b", "c", "d", "e", "f"), rWayTrie.words())
+    }
+
+
 }
