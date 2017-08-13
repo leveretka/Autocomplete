@@ -1,6 +1,5 @@
 package ua.kotlin.demo.tries
 
-import com.sun.xml.internal.fastinfoset.util.StringArray
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -123,6 +122,48 @@ class RWayTrieTest {
 
         assertEquals(4, rWayTrie.size)
         assertEquals(mutableListOf("a", "abcdef", "bdsfsd", "c"), rWayTrie.words())
+    }
+
+    @Test
+    fun shouldReturnEmptyListWhenSearchWithPredixInEmptyTrie() {
+        assertEquals(mutableListOf(), rWayTrie.wordsWithPrefix(""))
+    }
+
+    @Test
+    fun shouldReturnEmptyListWhenWordsWithPredixNotFound() {
+        rWayTrie.add("a" to 1)
+
+        assertEquals(mutableListOf(), rWayTrie.wordsWithPrefix("b"))
+    }
+
+    @Test
+    fun shouldReturnAllWordsForEmptyPrefix() {
+        rWayTrie.add("a" to 1)
+        rWayTrie.add("bc" to 2)
+
+        assertEquals(mutableListOf("a", "bc"), rWayTrie.wordsWithPrefix(""))
+    }
+
+    @Test
+    fun shouldReturnAllWordsForGivenPrefix() {
+        rWayTrie.add("ab" to 2)
+        rWayTrie.add("abc" to 3)
+
+        assertEquals(mutableListOf("ab", "abc"), rWayTrie.wordsWithPrefix("a"))
+    }
+
+    @Test
+    fun shouldNotReturnWordsWithoutGivenPrefix() {
+        rWayTrie.add("ab" to 2)
+        rWayTrie.add("abc" to 3)
+        rWayTrie.add("bcd" to 3)
+        rWayTrie.add("adfc" to 4)
+        rWayTrie.add("dfv" to 3)
+        rWayTrie.add("abcsfdg" to 7)
+        rWayTrie.add("aerferg" to 7)
+        rWayTrie.add("ccccc" to 5)
+
+        assertEquals(mutableListOf("ab", "abc", "abcsfdg"), rWayTrie.wordsWithPrefix("ab"))
     }
 
 }

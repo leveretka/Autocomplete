@@ -9,7 +9,7 @@ class RWayTrie : Trie {
     var root = Node()
         private set
 
-    class Node(var value: Int? = null, var nodes: Array<Node?> = Array<Node?>(ALPHABET_SIZE, {null}))
+    class Node(var value: Int? = null, var nodes: Array<Node?> = Array<Node?>(ALPHABET_SIZE, { null }))
 
     override fun add(word: Pair<String, Int?>) {
         val key = word.first
@@ -37,17 +37,16 @@ class RWayTrie : Trie {
     }
 
     override fun delete(word: String) {
-        root = delete(root, word, 0)?: Node()
+        root = delete(root, word, 0) ?: Node()
     }
 
-    private fun delete(x: Node?, key: String, d:Int) : Node? {
-        x?: return null
+    private fun delete(x: Node?, key: String, d: Int): Node? {
+        x ?: return null
         if (d == key.length) {
             if (x.value != null)
                 size--
             x.value = null
-        }
-        else {
+        } else {
             val index = key[d] - 'a'
             x.nodes[index] = delete(x.nodes[index], key, d + 1)
         }
@@ -64,6 +63,21 @@ class RWayTrie : Trie {
         return result
     }
 
+    override fun wordsWithPrefix(pref: String): MutableIterable<String> {
+        var x = root
+        var index = -1
+        pref.forEach { c ->
+            if (x.nodes[c - 'a'] != null) {
+                index = c - 'a'
+                x = x.nodes[index] as Node
+            } else
+                return mutableListOf()
+        }
+        val result = mutableListOf<String>()
+        words(x, index, pref.dropLast(1), result)
+        return result
+    }
+
     private fun words(node: Node, index: Int, prefix: String, result: MutableList<String>) {
         val word = if (index == -1) "" else prefix + ('a' + index)
         if (node.value != null)
@@ -73,7 +87,4 @@ class RWayTrie : Trie {
                 .forEach { words(node.nodes[it] as Node, it, word, result) }
     }
 
-    override fun wordsWithPrefix(pref: String): MutableIterable<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }
