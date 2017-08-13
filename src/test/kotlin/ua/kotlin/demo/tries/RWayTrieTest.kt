@@ -73,7 +73,7 @@ class RWayTrieTest {
 
         val firstWord = rWayTrie.root.nodes[0]
 
-        firstWord?.nodes?.all { it == null }?.let { assertTrue(it)}
+        assertTrue(firstWord!!.nodes.all { it == null })
     }
 
     @Test
@@ -88,7 +88,6 @@ class RWayTrieTest {
 
     @Test
     fun shouldReturnEmptyListWhenNothingWasAdded() {
-        assertEquals(0, rWayTrie.size)
         assertEquals(mutableListOf(), rWayTrie.words())
     }
 
@@ -96,7 +95,6 @@ class RWayTrieTest {
     fun shouldReturnOneExistingWord() {
         rWayTrie.add("a" to 1)
 
-        assertEquals(1, rWayTrie.size)
         assertEquals(mutableListOf("a"), rWayTrie.words())
     }
 
@@ -109,7 +107,6 @@ class RWayTrieTest {
         rWayTrie.add("e" to 1)
         rWayTrie.add("f" to 1)
 
-        assertEquals(6, rWayTrie.size)
         assertEquals(mutableListOf("a", "b", "c", "d", "e", "f"), rWayTrie.words())
     }
 
@@ -120,8 +117,7 @@ class RWayTrieTest {
         rWayTrie.add("c" to 1)
         rWayTrie.add("abcdef" to 6)
 
-        assertEquals(4, rWayTrie.size)
-        assertEquals(mutableListOf("a", "abcdef", "bdsfsd", "c"), rWayTrie.words())
+        assertEquals(mutableListOf("a", "c", "abcdef", "bdsfsd"), rWayTrie.words())
     }
 
     @Test

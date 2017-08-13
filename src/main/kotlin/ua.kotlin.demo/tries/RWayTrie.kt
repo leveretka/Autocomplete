@@ -1,5 +1,7 @@
 package ua.kotlin.demo.tries
 
+import java.util.*
+
 const val ALPHABET_SIZE = 26
 
 class RWayTrie : Trie {
@@ -14,7 +16,7 @@ class RWayTrie : Trie {
     override fun add(word: Pair<String, Int?>) {
         val key = word.first
         var x = root
-        key.toCharArray().map { it - 'a' }.forEach {
+        key.toCharArray().map(this::toIndex).forEach {
             if (x.nodes[it] == null)
                 x.nodes[it] = Node()
 
@@ -27,7 +29,7 @@ class RWayTrie : Trie {
 
     override fun contains(word: String): Boolean {
         var x = root
-        word.toCharArray().map { it - 'a' }.forEach {
+        word.toCharArray().map(this::toIndex).forEach {
             if (x.nodes[it] == null)
                 return false
 
@@ -35,6 +37,8 @@ class RWayTrie : Trie {
         }
         return x.value != null
     }
+
+    private fun toIndex(it: Char) = it - 'a'
 
     override fun delete(word: String) {
         root = delete(root, word, 0) ?: Node()
@@ -47,7 +51,7 @@ class RWayTrie : Trie {
                 size--
             x.value = null
         } else {
-            val index = key[d] - 'a'
+            val index = toIndex(key[d])
             x.nodes[index] = delete(x.nodes[index], key, d + 1)
         }
 
@@ -59,7 +63,9 @@ class RWayTrie : Trie {
 
     override fun words(): MutableIterable<String> {
         val result = mutableListOf<String>()
-        words(root, -1, "", result)
+        val toVisit = ArrayDeque<BfsNode>()
+
+        bfs(root, -1, toVisit, "", result)
         return result
     }
 
@@ -67,24 +73,33 @@ class RWayTrie : Trie {
         var x = root
         var index = -1
         pref.forEach { c ->
-            if (x.nodes[c - 'a'] != null) {
-                index = c - 'a'
+            if (x.nodes[toIndex(c)] != null) {
+                index = toIndex(c)
                 x = x.nodes[index] as Node
             } else
                 return mutableListOf()
         }
         val result = mutableListOf<String>()
-        words(x, index, pref.dropLast(1), result)
+        val toVisit = ArrayDeque<BfsNode>()
+
+        bfs(x, index, toVisit, pref.dropLast(1), result)
         return result
     }
 
-    private fun words(node: Node, index: Int, prefix: String, result: MutableList<String>) {
+    private class BfsNode(val node: Node, val index: Int, val prefix: String)
+
+    private fun bfs(node: Node, index: Int, toVisit:Queue<BfsNode>, prefix: String, words:MutableList<String>) {
         val word = if (index == -1) "" else prefix + ('a' + index)
         if (node.value != null)
-            result.add(word)
+            words.add(word)
+
         (0..ALPHABET_SIZE - 1)
                 .filter { node.nodes[it] != null }
-                .forEach { words(node.nodes[it] as Node, it, word, result) }
+                .forEach{ toVisit.offer(BfsNode(node.nodes[it]!!, it, word)) }
+
+        val bfsNode = toVisit.poll()
+        if (bfsNode != null)
+            bfs(bfsNode.node, bfsNode.index, toVisit, bfsNode.prefix, words)
     }
 
 }
