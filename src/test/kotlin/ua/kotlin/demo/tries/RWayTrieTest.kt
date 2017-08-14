@@ -6,7 +6,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class RWayTrieTest {
-    val rWayTrie = RWayTrie()
+    private val rWayTrie = RWayTrie()
 
     @Test
     fun shouldReturnZeroSizeForEmptyTrie() {

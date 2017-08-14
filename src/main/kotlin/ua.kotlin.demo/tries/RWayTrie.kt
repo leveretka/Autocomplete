@@ -11,7 +11,7 @@ class RWayTrie : Trie {
     var root = Node()
         private set
 
-    class Node(var value: Int? = null, var nodes: Array<Node?> = Array<Node?>(ALPHABET_SIZE, { null }))
+    class Node(var value: Int? = null, var nodes: Array<Node?> = Array(ALPHABET_SIZE, { null }))
 
     override fun add(word: Pair<String, Int?>) {
         val key = word.first
@@ -58,7 +58,7 @@ class RWayTrie : Trie {
         if (x.value != null)
             return x
 
-        return if ((0..ALPHABET_SIZE - 1).any { x.nodes[it] != null }) x else null
+        return if ((0 until ALPHABET_SIZE).any { x.nodes[it] != null }) x else null
     }
 
     override fun words(): Iterable<String> {
@@ -93,7 +93,7 @@ class RWayTrie : Trie {
         if (node.value != null)
             words.add(word)
 
-        (0..ALPHABET_SIZE - 1)
+        (0 until ALPHABET_SIZE)
                 .filter { node.nodes[it] != null }
                 .forEach{ toVisit.offer(BfsNode(node.nodes[it]!!, it, word)) }
 
