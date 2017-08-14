@@ -88,7 +88,7 @@ class RWayTrieTest {
 
     @Test
     fun shouldReturnEmptyListWhenNothingWasAdded() {
-        assertEquals(mutableListOf(), rWayTrie.words())
+        assertEquals(emptyList(), rWayTrie.words())
     }
 
     @Test
@@ -122,14 +122,14 @@ class RWayTrieTest {
 
     @Test
     fun shouldReturnEmptyListWhenSearchWithPredixInEmptyTrie() {
-        assertEquals(mutableListOf(), rWayTrie.wordsWithPrefix(""))
+        assertEquals(emptyList(), rWayTrie.wordsWithPrefix(""))
     }
 
     @Test
     fun shouldReturnEmptyListWhenWordsWithPredixNotFound() {
         rWayTrie.add("a" to 1)
 
-        assertEquals(mutableListOf(), rWayTrie.wordsWithPrefix("b"))
+        assertEquals(emptyList(), rWayTrie.wordsWithPrefix("b"))
     }
 
     @Test

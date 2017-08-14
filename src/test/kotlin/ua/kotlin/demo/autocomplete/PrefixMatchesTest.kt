@@ -25,4 +25,79 @@ class PrefixMatchesTest {
         assertEquals(4, prefixMatches.load("abc", "dsag", "fdgbkdg", "hhh"))
     }
 
+    @Test
+    fun shouldDeleteExistingWordFromDictionary() {
+        prefixMatches.load("abc")
+        prefixMatches.delete("abc")
+        assertFalse(prefixMatches.contains("abc"))
+    }
+
+    @Test
+    fun shouldReturnZeroSizeForEmptyDictionary() {
+        assertEquals(0, prefixMatches.getSize())
+    }
+
+    @Test
+    fun shouldReturnNumberOfWordsSInDictionary() {
+        prefixMatches.load("abc", "dsag", "fdgbkdg", "hhh")
+        assertEquals(4, prefixMatches.getSize())
+    }
+
+    @Test
+    fun shouldReturnEmptyListForEmptyDictionary() {
+        assertEquals(emptyList(), prefixMatches.wordsWithPrefix("aaa"))
+    }
+
+    @Test
+    fun shouldReturnEmptyListForShorterThan2SymbolsPrefix() {
+        prefixMatches.load("a", "ab", "ac", "abc")
+        assertEquals(emptyList(), prefixMatches.wordsWithPrefix("a"))
+    }
+
+    @Test
+    fun shouldReturnAllWordsWithGivenPrefix() {
+        prefixMatches.load("ab", "abc", "abcd", "abcc")
+        assertEquals(mutableListOf("ab", "abc", "abcc", "abcd"), prefixMatches.wordsWithPrefix("ab"))
+    }
+
+    @Test
+    fun shouldNotReturnWordsWithoutGivenPrefix() {
+        prefixMatches.load("ab", "abc", "bbbb", "abcc")
+        assertEquals(mutableListOf("ab", "abc", "abcc"), prefixMatches.wordsWithPrefix("ab"))
+    }
+
+    @Test
+    fun shouldReturnEmptyListForEmptyDictionaryWhenSearchForPrefixWithK() {
+        assertEquals(emptyList(), prefixMatches.wordsWithPrefix("aaa", 3))
+    }
+
+    @Test
+    fun shouldReturnEmptyListForShorterThan2SymbolsPrefixWhenSearchForPrefixWithK() {
+        prefixMatches.load("a", "ab", "ac", "abc")
+        assertEquals(emptyList(), prefixMatches.wordsWithPrefix("a", 3))
+    }
+
+    @Test
+    fun shouldReturnWordsOfKdifferentLengthWithGivenPrefixWhenSearchWithK() {
+        prefixMatches.load("abc", "abcd", "abcc", "abcss")
+        assertEquals(mutableListOf("abc", "abcc", "abcd", "abcss"), prefixMatches.wordsWithPrefix("abc", 3))
+    }
+
+    @Test
+    fun shouldNotReturnWordsWithLenngth2WithGivenPrefixWhenSearchWithK() {
+        prefixMatches.load("ab", "abc", "abcd", "abcc", "abcss")
+        assertEquals(mutableListOf("abc", "abcc", "abcd", "abcss"), prefixMatches.wordsWithPrefix("ab", 3))
+    }
+
+    @Test
+    fun shouldNotReturnTooMuchWordsWithGivenPrefixWhenSearchWithK() {
+        prefixMatches.load("ab", "abc", "abcd", "abcc", "abcss", "abcdsagsdfasf", "abcfdgdsdgdsd")
+        assertEquals(mutableListOf("abc", "abcc", "abcd", "abcss"), prefixMatches.wordsWithPrefix("ab", 3))
+    }
+
+    @Test
+    fun shouldNotReturnTooMuchWordsWithGivenPrefixWhenSearchWithKWhenSomeLengthAreMissing() {
+        prefixMatches.load("ab", "abc", "abcd", "abcc", "abcssss", "abcdsagsdfasf", "abcfdgdsdgdsd")
+        assertEquals(mutableListOf("abc", "abcc", "abcd", "abcssss"), prefixMatches.wordsWithPrefix("ab", 3))
+    }
 }

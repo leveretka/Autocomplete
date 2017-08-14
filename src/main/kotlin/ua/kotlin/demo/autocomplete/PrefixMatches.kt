@@ -1,9 +1,8 @@
 package ua.kotlin.demo.autocomplete
 
 import ua.kotlin.demo.tries.RWayTrie
-import ua.kotlin.demo.tries.Trie
 
-class PrefixMatches (val trie: Trie = RWayTrie()) {
+class PrefixMatches (private val trie: RWayTrie = RWayTrie()) {
 
     fun load(vararg strings: String): Int {
         strings.forEach { trie.add(it to it.length) }
@@ -12,12 +11,30 @@ class PrefixMatches (val trie: Trie = RWayTrie()) {
 
     fun contains(word: String): Boolean = trie.contains(word)
 
-    fun delete(word: String): Boolean = TODO()
+    fun delete(word: String) = trie.delete(word)
 
-    fun getSize(): Int = TODO()
+    fun getSize(): Int = trie.size
 
-    fun wordsWithPrefix(pref: String): Iterable<String> = TODO()
+    fun wordsWithPrefix(pref: String): Iterable<String> {
+        if (pref.length < 2)
+            return emptyList()
+        return trie.wordsWithPrefix(pref)
+    }
 
-    fun wordsWithPrefix(pref: String, k: Int): Iterable<String> = TODO()
+    fun wordsWithPrefix(pref: String, k: Int): Iterable<String> {
+        if (pref.length < 2)
+            return emptyList()
+        var i = 1
+        val words = trie.wordsWithPrefix(pref).filter { it.length > 2 }
+        val result = mutableListOf<String>()
+        for (word in words) {
+            if (i == k)
+                break
+            if (result.isNotEmpty() && word.length > result.last().length)
+                i++
+            result.add(word)
+        }
+        return result
+    }
 
 }

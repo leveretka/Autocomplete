@@ -61,7 +61,7 @@ class RWayTrie : Trie {
         return if ((0..ALPHABET_SIZE - 1).any { x.nodes[it] != null }) x else null
     }
 
-    override fun words(): MutableIterable<String> {
+    override fun words(): Iterable<String> {
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
 
@@ -69,7 +69,7 @@ class RWayTrie : Trie {
         return result
     }
 
-    override fun wordsWithPrefix(pref: String): MutableIterable<String> {
+    override fun wordsWithPrefix(pref: String): Iterable<String> {
         var x = root
         var index = -1
         pref.forEach { c ->
@@ -77,7 +77,7 @@ class RWayTrie : Trie {
                 index = toIndex(c)
                 x = x.nodes[index] as Node
             } else
-                return mutableListOf()
+                return emptyList()
         }
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
