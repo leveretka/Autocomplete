@@ -24,15 +24,16 @@ class PrefixMatches (private val trie: RWayTrie = RWayTrie()) {
     fun wordsWithPrefix(pref: String, k: Int): Iterable<String> {
         if (pref.length < 2)
             return emptyList()
-        var i = 1
+        var i = 0
         val words = trie.wordsWithPrefix(pref).filter { it.length > 2 }
         val result = mutableListOf<String>()
         for (word in words) {
-            if (i == k)
-                break
             if (result.isNotEmpty() && word.length > result.last().length)
                 i++
-            result.add(word)
+            if (i < k)
+                result.add(word)
+            else
+                break
         }
         return result
     }

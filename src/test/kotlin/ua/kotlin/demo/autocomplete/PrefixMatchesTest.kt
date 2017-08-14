@@ -100,4 +100,10 @@ class PrefixMatchesTest {
         prefixMatches.load("ab", "abc", "abcd", "abcc", "abcssss", "abcdsagsdfasf", "abcfdgdsdgdsd")
         assertEquals(mutableListOf("abc", "abcc", "abcd", "abcssss"), prefixMatches.wordsWithPrefix("ab", 3))
     }
+
+    @Test
+    fun shouldReturnWordsWithGivenPrefixWhenSearchWithK1() {
+        prefixMatches.load("ab", "abc", "abd", "abcd", "abcc", "abcssss", "abcdsagsdfasf", "abcfdgdsdgdsd")
+        assertEquals(mutableListOf("abc", "abd"), prefixMatches.wordsWithPrefix("ab", 1))
+    }
 }
