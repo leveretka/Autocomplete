@@ -1,6 +1,7 @@
 package ua.kotlin.demo.tries
 
 import java.util.*
+import kotlin.coroutines.experimental.buildIterator
 
 const val ALPHABET_SIZE = 26
 
@@ -65,8 +66,7 @@ class RWayTrie : Trie {
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
 
-        bfs(root, -1, toVisit, "", result)
-        return result
+        return Iterable { bfs(root, -1, toVisit, "", result) }
     }
 
     override fun wordsWithPrefix(pref: String): Iterable<String> {
@@ -82,24 +82,36 @@ class RWayTrie : Trie {
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
 
-        bfs(x, index, toVisit, pref.dropLast(1), result)
-        return result
+//        bfs(x, index, toVisit, pref.dropLast(1), result)
+        return Iterable { bfs(x, index, toVisit, pref.dropLast(1), result) }
     }
 
-    private class BfsNode(val node: Node, val index: Int, val prefix: String)
+    private data class BfsNode(val node: Node, val index: Int, val prefix: String)
 
-    private fun bfs(node: Node, index: Int, toVisit:Queue<BfsNode>, prefix: String, words:MutableList<String>) {
-        val word = if (index == -1) "" else prefix + ('a' + index)
-        if (node.value != null)
+    private fun bfs(node: Node, index: Int, toVisit: Queue<BfsNode>, prefix: String, words: MutableList<String>) = buildIterator {
+        var word = if (index == -1) "" else prefix + ('a' + index)
+        if (node.value != null) {
+            yield(word)
             words.add(word)
+        }
 
         (0 until ALPHABET_SIZE)
                 .filter { node.nodes[it] != null }
                 .forEach{ toVisit.offer(BfsNode(node.nodes[it]!!, it, word)) }
 
-        val bfsNode = toVisit.poll()
-        if (bfsNode != null)
-            bfs(bfsNode.node, bfsNode.index, toVisit, bfsNode.prefix, words)
+        while (toVisit.isNotEmpty()) {
+            val (curNode, curIndex, curPrefix) = toVisit.poll()
+
+            word = if (curIndex == -1) "" else curPrefix + ('a' + curIndex)
+            if (curNode.value != null) {
+                yield(word)
+                words.add(word)
+            }
+
+            (0 until ALPHABET_SIZE)
+                    .filter { curNode.nodes[it] != null }
+                    .forEach{ toVisit.offer(BfsNode(curNode.nodes[it]!!, it, word)) }
+        }
     }
 
 }

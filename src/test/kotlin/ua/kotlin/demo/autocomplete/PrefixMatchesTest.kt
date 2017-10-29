@@ -57,13 +57,13 @@ class PrefixMatchesTest {
     @Test
     fun shouldReturnAllWordsWithGivenPrefix() {
         prefixMatches.load("ab", "abc", "abcd", "abcc")
-        assertEquals(mutableListOf("ab", "abc", "abcc", "abcd"), prefixMatches.wordsWithPrefix("ab"))
+        assertEquals(mutableListOf("ab", "abc", "abcc", "abcd"), prefixMatches.wordsWithPrefix("ab").toMutableList())
     }
 
     @Test
     fun shouldNotReturnWordsWithoutGivenPrefix() {
         prefixMatches.load("ab", "abc", "bbbb", "abcc")
-        assertEquals(mutableListOf("ab", "abc", "abcc"), prefixMatches.wordsWithPrefix("ab"))
+        assertEquals(mutableListOf("ab", "abc", "abcc"), prefixMatches.wordsWithPrefix("ab").toMutableList())
     }
 
     @Test

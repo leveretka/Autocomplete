@@ -88,14 +88,14 @@ class RWayTrieTest {
 
     @Test
     fun shouldReturnEmptyListWhenNothingWasAdded() {
-        assertEquals(emptyList(), rWayTrie.words())
+        assertEquals(emptyList<String>(), rWayTrie.words().toMutableList())
     }
 
     @Test
     fun shouldReturnOneExistingWord() {
         rWayTrie.add("a" to 1)
 
-        assertEquals(mutableListOf("a"), rWayTrie.words())
+        assertEquals(mutableListOf("a"), rWayTrie.words().toMutableList())
     }
 
     @Test
@@ -107,7 +107,7 @@ class RWayTrieTest {
         rWayTrie.add("e" to 1)
         rWayTrie.add("f" to 1)
 
-        assertEquals(mutableListOf("a", "b", "c", "d", "e", "f"), rWayTrie.words())
+        assertEquals(mutableListOf("a", "b", "c", "d", "e", "f"), rWayTrie.words().toMutableList())
     }
 
     @Test
@@ -117,12 +117,12 @@ class RWayTrieTest {
         rWayTrie.add("c" to 1)
         rWayTrie.add("abcdef" to 6)
 
-        assertEquals(mutableListOf("a", "c", "abcdef", "bdsfsd"), rWayTrie.words())
+        assertEquals(mutableListOf("a", "c", "abcdef", "bdsfsd"), rWayTrie.words().toMutableList())
     }
 
     @Test
     fun shouldReturnEmptyListWhenSearchWithPredixInEmptyTrie() {
-        assertEquals(emptyList(), rWayTrie.wordsWithPrefix(""))
+        assertEquals(emptyList<String>(), rWayTrie.wordsWithPrefix("").toMutableList())
     }
 
     @Test
@@ -137,7 +137,9 @@ class RWayTrieTest {
         rWayTrie.add("a" to 1)
         rWayTrie.add("bc" to 2)
 
-        assertEquals(mutableListOf("a", "bc"), rWayTrie.wordsWithPrefix(""))
+
+
+        assertEquals(mutableListOf("a", "bc"), rWayTrie.wordsWithPrefix("").toMutableList())
     }
 
     @Test
@@ -145,7 +147,7 @@ class RWayTrieTest {
         rWayTrie.add("ab" to 2)
         rWayTrie.add("abc" to 3)
 
-        assertEquals(mutableListOf("ab", "abc"), rWayTrie.wordsWithPrefix("a"))
+        assertEquals(mutableListOf("ab", "abc"), rWayTrie.wordsWithPrefix("a").toMutableList())
     }
 
     @Test
@@ -159,7 +161,7 @@ class RWayTrieTest {
         rWayTrie.add("aerferg" to 7)
         rWayTrie.add("ccccc" to 5)
 
-        assertEquals(mutableListOf("ab", "abc", "abcsfdg"), rWayTrie.wordsWithPrefix("ab"))
+        assertEquals(mutableListOf("ab", "abc", "abcsfdg"), rWayTrie.wordsWithPrefix("ab").toMutableList())
     }
 
 }
