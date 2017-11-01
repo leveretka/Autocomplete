@@ -65,8 +65,9 @@ class RWayTrie : Trie {
     override fun words(): Iterable<String> {
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
+        toVisit.add(BfsNode(root, -1, ""))
 
-        return Iterable { bfs(root, -1, toVisit, "", result) }
+        return Iterable { bfs(toVisit, result) }
     }
 
     override fun wordsWithPrefix(pref: String): Iterable<String> {
@@ -81,28 +82,19 @@ class RWayTrie : Trie {
         }
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
+        toVisit.add(BfsNode(x, index, pref.dropLast(1)))
 
-//        bfs(x, index, toVisit, pref.dropLast(1), result)
-        return Iterable { bfs(x, index, toVisit, pref.dropLast(1), result) }
+        return Iterable { bfs(toVisit, result) }
     }
 
     private data class BfsNode(val node: Node, val index: Int, val prefix: String)
 
-    private fun bfs(node: Node, index: Int, toVisit: Queue<BfsNode>, prefix: String, words: MutableList<String>) = buildIterator {
-        var word = if (index == -1) "" else prefix + ('a' + index)
-        if (node.value != null) {
-            yield(word)
-            words.add(word)
-        }
-
-        (0 until ALPHABET_SIZE)
-                .filter { node.nodes[it] != null }
-                .forEach{ toVisit.offer(BfsNode(node.nodes[it]!!, it, word)) }
+    private fun bfs(toVisit: Queue<BfsNode>, words: MutableList<String>) = buildIterator {
 
         while (toVisit.isNotEmpty()) {
             val (curNode, curIndex, curPrefix) = toVisit.poll()
 
-            word = if (curIndex == -1) "" else curPrefix + ('a' + curIndex)
+            val word = if (curIndex == -1) "" else curPrefix + ('a' + curIndex)
             if (curNode.value != null) {
                 yield(word)
                 words.add(word)
