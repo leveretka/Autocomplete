@@ -1,6 +1,7 @@
 package ua.kotlin.demo.tries
 
 import java.util.*
+import kotlin.coroutines.experimental.buildIterator
 
 const val ALPHABET_SIZE = 26
 
@@ -65,9 +66,7 @@ class RWayTrie : Trie {
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
         toVisit.add(BfsNode(root, -1, ""))
-        bfs(toVisit, result) // return Iterable {bfs(toVisit, result)}
-
-        return result
+        return Iterable {bfs(toVisit, result)}
     }
 
     override fun wordsWithPrefix(pref: String): Iterable<String> {
@@ -83,21 +82,19 @@ class RWayTrie : Trie {
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
         toVisit.add(BfsNode(x, index, pref.dropLast(1)))
-        bfs(toVisit, result) // return Iterable {bfs(toVisit, result)}
-
-        return result
+        return Iterable {bfs(toVisit, result)}
     }
 
     private data class BfsNode(val node: Node, val index: Int, val prefix: String)
 
-    private fun bfs(toVisit: Queue<BfsNode>, words: MutableList<String>) { // = buildIterator
+    private fun bfs(toVisit: Queue<BfsNode>, words: MutableList<String>) = buildIterator {
 
         while (toVisit.isNotEmpty()) {
             val (curNode, curIndex, curPrefix) = toVisit.poll()
 
             val word = if (curIndex == -1) "" else curPrefix + ('a' + curIndex)
             if (curNode.value != null) {
-                words.add(word) // yield(word)
+                yield(word)
             }
 
             (0 until ALPHABET_SIZE)
