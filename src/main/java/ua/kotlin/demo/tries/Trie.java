@@ -1,5 +1,6 @@
 package ua.kotlin.demo.tries;
 
+
 import kotlin.Pair;
 
 public interface Trie {
