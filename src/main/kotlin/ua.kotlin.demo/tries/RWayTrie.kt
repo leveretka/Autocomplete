@@ -94,6 +94,7 @@ class RWayTrie : Trie {
 
             val word = if (curIndex == -1) "" else curPrefix + ('a' + curIndex)
             if (curNode.value != null) {
+                println("Found word: $word")
                 yield(word)
             }
 
