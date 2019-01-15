@@ -1,7 +1,6 @@
 package ua.kotlin.demo.tries
 
 import java.util.*
-import kotlin.coroutines.experimental.buildIterator
 
 const val ALPHABET_SIZE = 26
 
@@ -62,12 +61,7 @@ class RWayTrie : Trie {
         return if ((0 until ALPHABET_SIZE).any { x.nodes[it] != null }) x else null
     }
 
-    override fun words(): Iterable<String> {
-        val result = mutableListOf<String>()
-        val toVisit = ArrayDeque<BfsNode>()
-        toVisit.add(BfsNode(root, -1, ""))
-        return Iterable {bfs(toVisit, result)}
-    }
+    override fun words() = findWordsWithPrefix(root, -1, "")
 
     override fun wordsWithPrefix(pref: String): Iterable<String> {
         var x = root
@@ -79,15 +73,20 @@ class RWayTrie : Trie {
             } else
                 return emptyList()
         }
+        return findWordsWithPrefix(x, index, pref.dropLast(1))
+    }
+
+    private fun findWordsWithPrefix(node: Node, index: Int, prefix: String) : Iterable<String> {
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
-        toVisit.add(BfsNode(x, index, pref.dropLast(1)))
-        return Iterable {bfs(toVisit, result)}
+        toVisit.add(BfsNode(node, index, prefix))
+        bfs(toVisit, result)
+        return result
     }
 
     private data class BfsNode(val node: Node, val index: Int, val prefix: String)
 
-    private fun bfs(toVisit: Queue<BfsNode>, words: MutableList<String>) = buildIterator {
+    private fun bfs(toVisit: Queue<BfsNode>, words: MutableList<String>) {
 
         while (toVisit.isNotEmpty()) {
             val (curNode, curIndex, curPrefix) = toVisit.poll()
@@ -95,7 +94,7 @@ class RWayTrie : Trie {
             val word = if (curIndex == -1) "" else curPrefix + ('a' + curIndex)
             if (curNode.value != null) {
                 println("Found word: $word")
-                yield(word)
+                words.add(word)
             }
 
             (0 until ALPHABET_SIZE)

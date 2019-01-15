@@ -16,5 +16,6 @@ fun main(args: Array<String>) {
 
     val list = trie.wordsWithPrefix("a").take(5).toList()
 
+
     println("list: $list")
 }
