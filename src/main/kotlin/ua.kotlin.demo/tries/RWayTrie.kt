@@ -80,13 +80,12 @@ class RWayTrie : Trie {
         val result = mutableListOf<String>()
         val toVisit = ArrayDeque<BfsNode>()
         toVisit.add(BfsNode(node, index, prefix))
-        bfs(toVisit, result)
-        return result
+        return Iterable { bfs(toVisit, result) }
     }
 
     private data class BfsNode(val node: Node, val index: Int, val prefix: String)
 
-    private fun bfs(toVisit: Queue<BfsNode>, words: MutableList<String>) {
+    private fun bfs(toVisit: Queue<BfsNode>, words: MutableList<String>) = iterator {
 
         while (toVisit.isNotEmpty()) {
             val (curNode, curIndex, curPrefix) = toVisit.poll()
@@ -94,7 +93,7 @@ class RWayTrie : Trie {
             val word = if (curIndex == -1) "" else curPrefix + ('a' + curIndex)
             if (curNode.value != null) {
                 println("Found word: $word")
-                words.add(word)
+                yield(word)
             }
 
             (0 until ALPHABET_SIZE)

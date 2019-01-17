@@ -1,6 +1,5 @@
 package ua.kotlin.demo.main
 
-import ua.kotlin.demo.autocomplete.PrefixMatches
 import ua.kotlin.demo.tries.RWayTrie
 import java.io.BufferedReader
 import java.io.FileReader
@@ -14,7 +13,7 @@ fun main(args: Array<String>) {
         }
     }
 
-    val list = trie.wordsWithPrefix("a").take(5).toList()
+    val list = trie.wordsWithPrefix("b").take(5).toList()
 
 
     println("list: $list")
